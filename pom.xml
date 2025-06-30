@@ -5,7 +5,7 @@
 
     <groupId>guides.hazelcast</groupId>
     <artifactId>hazelcast-embedded-springboot</artifactId>
-    <version>0.1</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,6 +16,8 @@
 
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <hazelcast.version>5.5.0</hazelcast.version>
     </properties>
 
