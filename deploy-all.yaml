@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hazelcast-embedded
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hazelcast-embedded-deployment
+  namespace: hazelcast-embedded
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hazelcast-embedded-pod
+  template:
+    metadata:
+      labels:
+        app: hazelcast-embedded-pod
+    spec:
+      containers:
+        - image: harbor.ilyesdimassi.com/library/hazelcast-embedded-kubernetes
+          imagePullPolicy: Always
+          name: hazelcast-embedded-pod-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hazelcast-embedded-service
+  namespace: hazelcast-embedded
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: hazelcast-embedded-pod
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hazelcast-embedded-ingress
+  namespace: hazelcast-embedded
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    external-dns.alpha.kubernetes.io/hostname: ""
+    external-dns.alpha.kubernetes.io/ingress-hostname-source: annotation-only
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "hazelcast-embedded.ilyesdimassi.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hazelcast-embedded-service
+                port:
+                  number: 8080
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hazelcast-embedded-cluster-role
+rules:
+  - apiGroups:
+      - ""
+      # Access to apps API is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - apps
+    resources:
+      - endpoints
+      - pods
+      - nodes
+      - services
+      # Access to statefulsets resource is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - statefulsets
+    verbs:
+      - get
+      - list
+      # Watching resources is only required to support automatic cluster state management
+      # when persistence (hot-restart) is enabled.
+      - watch
+  - apiGroups:
+      - "discovery.k8s.io"
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hazelcast-embedded-cluster-role-binding
+  namespace: hazelcast-embedded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: hazelcast-embedded-cluster-role
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: hazelcast-embedded

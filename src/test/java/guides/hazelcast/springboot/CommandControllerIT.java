@@ -30,7 +30,7 @@ public class CommandControllerIT {
     public void testPutRequest(){
         //when
         WebTestClient.ResponseSpec responseSpec = webTestClient
-                .post()
+                .get()
                 .uri("/put?key={key}&value={value}", "key1", "value1")
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
                 .exchange();
@@ -48,7 +48,7 @@ public class CommandControllerIT {
     public void testGetRequest(){
         //given
         webTestClient
-                .post()
+                .get()
                 .uri("/put?key={key}&value={value}", "key1", "value1")
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
                 .exchange();
