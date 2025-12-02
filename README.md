@@ -14,8 +14,9 @@ docker build -t harbor.ilyesdimassi.com/library/hazelcast-embedded-kubernetes .
 # push the image to the repo
 docker push harbor.ilyesdimassi.com/library/hazelcast-embedded-kubernetes
 # clean the app in kube
-kubectl delete namespace hazelcast-embedded-kubernetes
-kubectl delete clusterrolebindings.rbac.authorization.k8s.io hazelcast-embedded-cluster-role-binding
-kubectl delete clusterrole hazelcast-embedded-cluster-role
-kubectl apply -f deploy-all.yaml
+kubectl delete namespace hazelcast-embedded-1 hazelcast-embedded-2
+kubectl delete clusterrolebindings.rbac.authorization.k8s.io hazelcast-embedded-1-cluster-role-binding hazelcast-embedded-2-cluster-role-binding
+kubectl delete clusterrole hazelcast-embedded-1-cluster-role hazelcast-embedded-2-cluster-role
+kubectl apply -f deploy-all-app-1.yaml
+kubectl apply -f deploy-all-app-2.yaml
 ```
