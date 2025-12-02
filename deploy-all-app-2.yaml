@@ -22,6 +22,9 @@ spec:
         - image: harbor.ilyesdimassi.com/library/hazelcast-embedded-kubernetes
           imagePullPolicy: Always
           name: hazelcast-embedded-2-pod-app
+          env:
+            - name: HZ_CLUSTERNAME
+              value: hazelcast-embedded-2-cluster
 ---
 apiVersion: v1
 kind: Service

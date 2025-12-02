@@ -1,5 +1,6 @@
 hazelcast:
-  cluster-name: hazelcast-cluster
+  #not setting the cluster-name here instead doing it via env var
+  #cluster-name: hazelcast-cluster
   properties:
     hazelcast.logging.type: log4j2
   network:
