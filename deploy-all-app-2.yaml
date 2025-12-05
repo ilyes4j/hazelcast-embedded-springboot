@@ -64,9 +64,10 @@ spec:
                   number: 8080
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: hazelcast-embedded-2-cluster-role
+  name: hazelcast-embedded-2-role
+  namespace: hazelcast-embedded-2
 rules:
   - apiGroups:
       - ""
@@ -96,14 +97,14 @@ rules:
       - list
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: hazelcast-embedded-2-cluster-role-binding
+  name: hazelcast-embedded-2-role-binding
   namespace: hazelcast-embedded-2
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: hazelcast-embedded-2-cluster-role
+  kind: Role
+  name: hazelcast-embedded-2-role
 subjects:
   - kind: ServiceAccount
     name: default
